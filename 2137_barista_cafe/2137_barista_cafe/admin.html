@@ -140,6 +140,81 @@
             .admin-content.active {
                 display: block;
             }
+            
+            .nav-tabs-custom {
+                border-bottom: 2px solid var(--primary-color);
+                margin-bottom: 2rem;
+            }
+            
+            .nav-tabs-custom .nav-link {
+                border: none;
+                color: var(--dark-color);
+                font-weight: 600;
+                padding: 1rem 2rem;
+                border-radius: 0;
+                position: relative;
+            }
+            
+            .nav-tabs-custom .nav-link.active {
+                background: none;
+                color: var(--primary-color);
+                border-bottom: 3px solid var(--primary-color);
+            }
+            
+            .nav-tabs-custom .nav-link:hover {
+                color: var(--primary-color);
+                border-color: transparent;
+            }
+            
+            .agent-card {
+                background: white;
+                border-radius: 15px;
+                padding: 1.5rem;
+                box-shadow: 0 4px 15px rgba(30, 58, 138, 0.1);
+                margin-bottom: 1.5rem;
+                transition: transform 0.3s ease;
+                border-left: 4px solid var(--primary-color);
+            }
+            
+            .agent-card:hover {
+                transform: translateY(-3px);
+            }
+            
+            .agent-status {
+                padding: 0.3rem 0.8rem;
+                border-radius: 15px;
+                font-size: 0.75rem;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+            
+            .status-activo {
+                background: #d1fae5;
+                color: #065f46;
+            }
+            
+            .status-inactivo {
+                background: #fee2e2;
+                color: #991b1b;
+            }
+            
+            .status-mantenimiento {
+                background: #fef3c7;
+                color: #92400e;
+            }
+            
+            .agent-icon {
+                width: 50px;
+                height: 50px;
+                background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
+            }
         </style>
     </head>
 
@@ -202,7 +277,7 @@
                     <div class="row align-items-center">
                         <div class="col-lg-8">
                             <h1>Panel Administrativo</h1>
-                            <p class="lead">Gestión de cotizaciones y solicitudes de servicio</p>
+                            <p class="lead">Gestión de cotizaciones y agentes IA</p>
                         </div>
                         <div class="col-lg-4 text-end">
                             <p class="mb-0">Última actualización:</p>
@@ -215,6 +290,28 @@
             <!-- ADMIN CONTAINER -->
             <div class="admin-container">
                 <div class="container">
+                    
+                    <!-- NAVIGATION TABS -->
+                    <ul class="nav nav-tabs nav-tabs-custom" id="adminTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="cotizaciones-tab" data-bs-toggle="tab" data-bs-target="#cotizaciones-panel" type="button" role="tab">
+                                <i class="bi-clipboard-data me-2"></i>
+                                Cotizaciones
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="agentes-tab" data-bs-toggle="tab" data-bs-target="#agentes-panel" type="button" role="tab">
+                                <i class="bi-robot me-2"></i>
+                                Agentes IA
+                            </button>
+                        </li>
+                    </ul>
+                    
+                    <!-- TAB CONTENT -->
+                    <div class="tab-content" id="adminTabContent">
+                        
+                        <!-- COTIZACIONES PANEL -->
+                        <div class="tab-pane fade show active" id="cotizaciones-panel" role="tabpanel">
                     
                     <!-- ESTADÍSTICAS -->
                     <div class="row mb-5">
@@ -286,6 +383,71 @@
                             <p class="text-muted">Las cotizaciones aparecerán aquí cuando los clientes envíen el formulario.</p>
                         </div>
                     </div>
+                        </div>
+                        <!-- END COTIZACIONES PANEL -->
+                        
+                        <!-- AGENTES IA PANEL -->
+                        <div class="tab-pane fade" id="agentes-panel" role="tabpanel">
+                            
+                            <!-- ESTADÍSTICAS AGENTES -->
+                            <div class="row mb-5">
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="stats-card text-center">
+                                        <div class="stats-number" id="totalAgentes">0</div>
+                                        <h6>Total Agentes</h6>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="stats-card text-center">
+                                        <div class="stats-number" id="agentesActivos">0</div>
+                                        <h6>Activos</h6>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="stats-card text-center">
+                                        <div class="stats-number" id="agentesInactivos">0</div>
+                                        <h6>Inactivos</h6>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="stats-card text-center">
+                                        <div class="stats-number" id="agentesMantenimiento">0</div>
+                                        <h6>Mantenimiento</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- LISTA DE AGENTES IA -->
+                            <div class="cotizaciones-table">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <h3>Mis Agentes IA Disponibles</h3>
+                                    <div>
+                                        <button class="btn btn-action" onclick="actualizarAgentes()">
+                                            <i class="bi-arrow-clockwise me-2"></i>
+                                            Actualizar
+                                        </button>
+                                        <button class="btn btn-action" onclick="configurarAgentes()">
+                                            <i class="bi-gear me-2"></i>
+                                            Configurar
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div id="agentesContainer" class="row">
+                                    <!-- Los agentes se cargarán aquí -->
+                                </div>
+                                
+                                <div id="noAgentes" class="text-center py-5" style="display: none;">
+                                    <i class="bi-robot" style="font-size: 3rem; color: #ccc;"></i>
+                                    <h5 class="mt-3 text-muted">No hay agentes IA disponibles</h5>
+                                    <p class="text-muted">Los agentes aparecerán aquí cuando estén configurados en tu cuenta.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END AGENTES IA PANEL -->
+                        
+                    </div>
+                    <!-- END TAB CONTENT -->
                 </div>
             </div>
         </div>
@@ -483,6 +645,242 @@ ${cotizacion.mensaje}
                     document.getElementById('lastUpdate').textContent = new Date().toLocaleString();
                 }
             }, 30000);
+
+            // FUNCIONES PARA AGENTES IA
+            
+            // Mock data para agentes IA disponibles
+            const agentesIADisponibles = [
+                {
+                    id: 'ai-001',
+                    nombre: 'TecnoVita Assistant',
+                    tipo: 'Asistente General',
+                    descripcion: 'Asistente virtual para consultas generales sobre desarrollo web y software',
+                    estado: 'activo',
+                    modelo: 'GPT-4',
+                    ultimoUso: '2025-01-08 14:30',
+                    consultas: 1847,
+                    precision: '94%',
+                    icono: '🤖'
+                },
+                {
+                    id: 'ai-002',
+                    nombre: 'Code Reviewer',
+                    tipo: 'Revisión de Código',
+                    descripcion: 'Especializado en revisión y optimización de código fuente',
+                    estado: 'activo',
+                    modelo: 'Claude-3',
+                    ultimoUso: '2025-01-08 16:45',
+                    consultas: 892,
+                    precision: '96%',
+                    icono: '💻'
+                },
+                {
+                    id: 'ai-003',
+                    nombre: 'SEO Optimizer',
+                    tipo: 'Optimización SEO',
+                    descripcion: 'Agente especializado en optimización para motores de búsqueda',
+                    estado: 'activo',
+                    modelo: 'GPT-4',
+                    ultimoUso: '2025-01-08 12:15',
+                    consultas: 634,
+                    precision: '91%',
+                    icono: '📈'
+                },
+                {
+                    id: 'ai-004',
+                    nombre: 'Database Expert',
+                    tipo: 'Base de Datos',
+                    descripcion: 'Especialista en diseño y optimización de bases de datos',
+                    estado: 'mantenimiento',
+                    modelo: 'Claude-3',
+                    ultimoUso: '2025-01-07 18:20',
+                    consultas: 445,
+                    precision: '98%',
+                    icono: '🗄️'
+                },
+                {
+                    id: 'ai-005',
+                    nombre: 'UI/UX Designer',
+                    tipo: 'Diseño de Interfaces',
+                    descripcion: 'Asistente para diseño de interfaces y experiencia de usuario',
+                    estado: 'activo',
+                    modelo: 'GPT-4',
+                    ultimoUso: '2025-01-08 10:30',
+                    consultas: 723,
+                    precision: '89%',
+                    icono: '🎨'
+                },
+                {
+                    id: 'ai-006',
+                    nombre: 'Security Analyst',
+                    tipo: 'Seguridad Web',
+                    descripcion: 'Especializado en análisis de seguridad y vulnerabilidades',
+                    estado: 'inactivo',
+                    modelo: 'Claude-3',
+                    ultimoUso: '2025-01-05 09:15',
+                    consultas: 287,
+                    precision: '97%',
+                    icono: '🔒'
+                }
+            ];
+
+            // Cargar agentes IA
+            function cargarAgentesIA() {
+                const container = document.getElementById('agentesContainer');
+                const noAgentes = document.getElementById('noAgentes');
+                
+                if (agentesIADisponibles.length === 0) {
+                    container.innerHTML = '';
+                    noAgentes.style.display = 'block';
+                    return;
+                }
+                
+                noAgentes.style.display = 'none';
+                
+                container.innerHTML = agentesIADisponibles.map(agente => `
+                    <div class="col-lg-6 col-md-12 mb-4">
+                        <div class="agent-card">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="agent-icon">
+                                    ${agente.icono}
+                                </div>
+                                <span class="agent-status status-${agente.estado}">
+                                    ${getStatusTextAgent(agente.estado)}
+                                </span>
+                            </div>
+                            
+                            <h5 class="mb-2">${agente.nombre}</h5>
+                            <p class="text-muted mb-2"><strong>Tipo:</strong> ${agente.tipo}</p>
+                            <p class="text-muted mb-3">${agente.descripcion}</p>
+                            
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <small class="text-muted">Modelo:</small><br>
+                                    <strong>${agente.modelo}</strong>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted">Precisión:</small><br>
+                                    <strong style="color: var(--primary-color);">${agente.precision}</strong>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <small class="text-muted">Consultas:</small><br>
+                                    <strong>${agente.consultas.toLocaleString()}</strong>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted">Último uso:</small><br>
+                                    <strong>${agente.ultimoUso}</strong>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-action flex-fill" onclick="interactuarConAgente('${agente.id}')" ${agente.estado !== 'activo' ? 'disabled' : ''}>
+                                    <i class="bi-chat-dots me-2"></i>
+                                    ${agente.estado === 'activo' ? 'Consultar' : 'No disponible'}
+                                </button>
+                                <button class="btn btn-action" onclick="verDetalleAgente('${agente.id}')" title="Ver detalles">
+                                    <i class="bi-info-circle"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                actualizarEstadisticasAgentes();
+            }
+
+            // Actualizar estadísticas de agentes
+            function actualizarEstadisticasAgentes() {
+                const activos = agentesIADisponibles.filter(a => a.estado === 'activo').length;
+                const inactivos = agentesIADisponibles.filter(a => a.estado === 'inactivo').length;
+                const mantenimiento = agentesIADisponibles.filter(a => a.estado === 'mantenimiento').length;
+                
+                document.getElementById('totalAgentes').textContent = agentesIADisponibles.length;
+                document.getElementById('agentesActivos').textContent = activos;
+                document.getElementById('agentesInactivos').textContent = inactivos;
+                document.getElementById('agentesMantenimiento').textContent = mantenimiento;
+            }
+
+            // Obtener texto del estado para agentes
+            function getStatusTextAgent(estado) {
+                const estados = {
+                    'activo': 'Activo',
+                    'inactivo': 'Inactivo',
+                    'mantenimiento': 'Mantenimiento'
+                };
+                return estados[estado] || 'Desconocido';
+            }
+
+            // Interactuar con agente
+            function interactuarConAgente(agenteId) {
+                const agente = agentesIADisponibles.find(a => a.id === agenteId);
+                if (!agente) return;
+                
+                alert(`🤖 Iniciando consulta con ${agente.nombre}\n\nTipo: ${agente.tipo}\nModelo: ${agente.modelo}\nPrecisión: ${agente.precision}\n\nEn una implementación real, aquí se abriría la interfaz de chat con el agente IA.`);
+            }
+
+            // Ver detalle del agente
+            function verDetalleAgente(agenteId) {
+                const agente = agentesIADisponibles.find(a => a.id === agenteId);
+                if (!agente) return;
+                
+                alert(`
+📋 Detalle del Agente IA
+
+🤖 Nombre: ${agente.nombre}
+🏷️ ID: ${agente.id}
+📝 Tipo: ${agente.tipo}
+📊 Estado: ${getStatusTextAgent(agente.estado)}
+🧠 Modelo: ${agente.modelo}
+🎯 Precisión: ${agente.precision}
+📈 Consultas realizadas: ${agente.consultas.toLocaleString()}
+⏰ Último uso: ${agente.ultimoUso}
+
+📄 Descripción:
+${agente.descripcion}
+                `);
+            }
+
+            // Actualizar agentes
+            function actualizarAgentes() {
+                // Simular actualización
+                const button = event.target.closest('button');
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="bi-arrow-clockwise spin me-2"></i>Actualizando...';
+                button.disabled = true;
+                
+                setTimeout(() => {
+                    cargarAgentesIA();
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                    alert('✅ Agentes IA actualizados correctamente');
+                }, 2000);
+            }
+
+            // Configurar agentes
+            function configurarAgentes() {
+                alert('⚙️ Configuración de Agentes IA\n\nEn una implementación completa, aquí podrías:\n\n• Activar/desactivar agentes\n• Configurar parámetros de cada agente\n• Establecer límites de uso\n• Definir roles y permisos\n• Personalizar respuestas\n\nContacta a TecnoVita JC para implementar estas funcionalidades avanzadas.');
+            }
+
+            // Event listener para cuando se carga el contenido de agentes IA
+            document.getElementById('agentes-tab').addEventListener('shown.bs.tab', function() {
+                cargarAgentesIA();
+            });
+
+            // CSS para la animación de rotación
+            const style = document.createElement('style');
+            style.textContent = `
+                .spin {
+                    animation: spin 1s linear infinite;
+                }
+                @keyframes spin {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
         </script>
     </body>
 </html>
